@@ -45,7 +45,7 @@ jobs:
         run: npm run build
 
   audit:
-    if: github.event.pull_request.merged == true && (github.base_ref == 'main' || github.base_ref == 'release')
+    if: github.event_name == 'pull_request' && (github.event.pull_request.base.ref == 'main' || github.event.pull_request.base.ref == 'release')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
