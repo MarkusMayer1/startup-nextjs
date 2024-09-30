@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: startup-nextjs-deployment
+  labels:
+    app: startup-nextjs
+spec:
+  replicas: 3 # Number of pod replicas to maintain
+  selector:
+    matchLabels:
+      app: startup-nextjs
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1 # Maximum number of pods that can be unavailable during the update
+      maxSurge: 3 # Maximum number of extra pods created during the update
+  template:
+    metadata:
+      labels:
+        app: startup-nextjs
+    spec:
+      containers:
+        - name: startup-nextjs
+          image: markusmayer1/startup-nextjs:latest
+          resources:
+            requests:
+              cpu: "100m" # Minimum CPU requested for this container
+            limits:
+              cpu: "200m" # Maximum CPU the container is allowed to consume
+          ports:
+            - containerPort: 3000 # The port exposed by the container
+          livenessProbe: # Health check to determine if the container is running correctly
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30 # Time to wait before starting the first probe after the container starts
+            periodSeconds: 10 # How often to perform the check
+            timeoutSeconds: 5 # Timeout for each check
+          readinessProbe: # Health check to determine if the container is ready to accept traffic
+            httpGet:
+              path: /api/ready
+              port: 3000
+            initialDelaySeconds: 30 # Delay before checking the readiness of the container
+            periodSeconds: 11 # How often to perform the readiness check
+            timeoutSeconds: 5 # Timeout for each check

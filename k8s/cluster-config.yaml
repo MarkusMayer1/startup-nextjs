@@ -1,0 +1,9 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: dev-ops # Name of the cluster
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30000 # Container port which is mapped to the host port
+        hostPort: 30000 # Host port where the service will be accessible from the host machine
+        protocol: TCP
