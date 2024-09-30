@@ -41,5 +41,5 @@ spec:
               path: /api/ready
               port: 3000
             initialDelaySeconds: 30 # Delay before checking the readiness of the container
-            periodSeconds: 11 # How often to perform the readiness check
+            periodSeconds: 10 # How often to perform the readiness check
             timeoutSeconds: 5 # Timeout for each check
