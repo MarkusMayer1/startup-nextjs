@@ -61,3 +61,21 @@ jobs:
 
       - name: Run audit
         run: npm audit
+
+  terraform-apply:
+    if: github.ref == 'refs/heads/release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Apply Terraform configuration
+        env:
+          TF_VAR_azure_subscription_id: ${{ secrets.STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID }}
+        run: terraform apply -auto-approve
