@@ -5,18 +5,18 @@ on:
   # Automatically trigger it when detected changes in repo
   push:
     branches: 
-      [ release ]
+      [ feature/assignment1 ]
     paths:
     - '**'
     - '.github/workflows/startup-nextjs-AutoDeployTrigger-bfe08b7d-cf02-4ec4-8e01-47fc1aef19b9.yml'
 
   # Allow manual trigger 
-  workflow_dispatch:      
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions: 
+    permissions:
       id-token: write #This is required for requesting the OIDC JWT Token
       contents: read #Required when GH token is used to authenticate with private repo
 
