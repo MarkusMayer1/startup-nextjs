@@ -80,7 +80,7 @@ jobs:
 
   terraform-apply:
     if: github.ref == 'refs/heads/release'
-    todo needs: docker
+    needs: docker
     runs-on: ubuntu-latest
     permissions:
       id-token: write # This is required for requesting the OIDC JWT Token
