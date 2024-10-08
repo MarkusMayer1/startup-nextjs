@@ -74,10 +74,6 @@ jobs:
 
       - name: Azure login with Managed Identiy
         run: az login --identity --username ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Initialize Terraform
         run: terraform init
