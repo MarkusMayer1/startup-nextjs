@@ -78,11 +78,11 @@ jobs:
       - name: Apply Terraform configuration
         env:
           TF_VAR_azure_subscription_id: ${{ secrets.STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID }}
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve | tee terraform-output.log
 
       - name: Upload Terraform logs
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: terraform-logs
           path: terraform-output.log
