@@ -101,10 +101,11 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Download Terraform State
+      - name: Download Terraform State (if exists)
         uses: actions/download-artifact@v3
         with:
-          name: terraform-state 
+          name: terraform-state
+        continue-on-error: true # This ensures the job continues even if the artifact is missing
 
       - name: Initialize Terraform
         run: terraform init
