@@ -76,4 +76,7 @@ jobs:
         run: terraform init
 
       - name: Apply Terraform configuration
-        run: terraform apply -auto-approve -var="azure_subscription_id=${{ secrets.STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID }}"
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_azure_subscription_id: ${{ secrets.STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID }}
+          TF_VAR_azure_tenant_id: ${{ secrets.STARTUPNEXTJS_AZURE_TENANT_ID }}
