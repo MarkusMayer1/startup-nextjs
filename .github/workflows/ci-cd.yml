@@ -65,6 +65,8 @@ jobs:
   terraform-apply:
     if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the OIDC JWT Token
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
