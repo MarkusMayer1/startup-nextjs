@@ -110,12 +110,10 @@ jobs:
         run: terraform init
 
       - name: Apply and Save Terraform State as Artifact
-        run: |
-          terraform apply -auto-approve
-          cp terraform.tfstate state/
-          
+        run: terraform apply -auto-approve
+
       - name: Upload Terraform State
         uses: actions/upload-artifact@v2
         with:
           name: terraform-state
-          path: state/terraform.tfstate
+          path: terraform.tfstate
