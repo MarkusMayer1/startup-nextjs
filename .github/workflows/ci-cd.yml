@@ -100,18 +100,12 @@ jobs:
           client-id: ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Create Cache Key for Terraform State
-        id: cache-key
-        run: echo "::set-output name=cache-key::terraform-state-cache"
         
       - name: Restore Terraform State (if exists)
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v4
         with:
-          path: |
-            terraform.tfstate
-            terraform.tfstate.backup
-          key: ${{ steps.cache-key.outputs.cache-key }}
+          path: terraform.tfstate
+          key: terraform.tfstate
 
       - name: Initialize Terraform
         run: terraform init
@@ -120,9 +114,7 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Cache Terraform State
-        uses: actions/cache@v3
+        uses: actions/cache/save@v4
         with:
-          path: |
-            terraform.tfstate
-            terraform.tfstate.backup
-          key: ${{ steps.cache-key.outputs.cache-key }}
+          path: terraform.tfstate
+          key: terraform.tfstate
