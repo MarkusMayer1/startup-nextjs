@@ -18,12 +18,6 @@ provider "azurerm" {
   features {}
 }
 
-variable "container_image_tag" {
-  description = "The tag of the container image"
-  type        = string
-  default     = "latest"
-}
-
 resource "azurerm_resource_group" "startup_nextjs" {
   name     = "devOps"
   location = "West Europe"
@@ -44,7 +38,7 @@ resource "azurerm_container_app" "startup_nextjs" {
   template {
     container {
       name   = "startup-nextjs"
-      image  = "markusmayer1/startup-nextjs:${var.container_image_tag}"
+      image  = "markusmayer1/startup-nextjs:latest"
       cpu    = 0.25
       memory = "0.5Gi"
     }
