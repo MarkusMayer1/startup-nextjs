@@ -101,20 +101,28 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Download Terraform State (if exists)
-        uses: actions/download-artifact@v3
+      - name: Create Cache Key for Terraform State
+        id: cache-key
+        run: echo "::set-output name=cache-key::terraform-state-cache"
+        
+      - name: Restore Terraform State (if exists)
+        uses: actions/cache@v3
         with:
-          name: terraform-state
-        continue-on-error: true # This ensures the job continues even if the artifact is missing
+          path: |
+            terraform.tfstate
+            terraform.tfstate.backup
+          key: ${{ steps.cache-key.outputs.cache-key }}
 
       - name: Initialize Terraform
         run: terraform init
 
-      - name: Apply and Save Terraform State as Artifact
+      - name: Terraform Apply
         run: terraform apply -auto-approve
 
-      - name: Upload Terraform State
-        uses: actions/upload-artifact@v3
+      - name: Cache Terraform State
+        uses: actions/cache@v3
         with:
-          name: terraform-state
-          path: terraform.tfstate
+          path: |
+            terraform.tfstate
+            terraform.tfstate.backup
+          key: ${{ steps.cache-key.outputs.cache-key }}
