@@ -96,7 +96,7 @@ jobs:
         run: export TF_LOG=DEBUG
 
       - name: Azure Login
-        run: az login --device-code
+        run: az login --use-device-code
 
       - name: Initialize Terraform
         run: terraform init
