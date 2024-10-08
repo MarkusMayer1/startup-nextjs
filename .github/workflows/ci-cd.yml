@@ -72,10 +72,12 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
 
-      - name: Login to Azure
+      - name: Azure Login
         uses: azure/login@v1
         with:
-          identity: ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
+          client-id: ${{ secrets.STARTUPNEXTJS_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.STARTUPNEXTJS_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID }}
 
       - name: Initialize Terraform
         run: terraform init
