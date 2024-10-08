@@ -7,14 +7,19 @@ terraform {
   }
 }
 
-variable "STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID" {
+variable "azure_subscription_id" {
+  type = string
+}
+
+variable "azure_tenant_id" {
   type = string
 }
 
 provider "azurerm" {
   features {}
 
-  subscription_id = var.STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID
+  subscription_id = var.azure_subscription_id
+  tenant_id       = var.azure_tenant_id
 }
 
 resource "azurerm_resource_group" "rg" {
