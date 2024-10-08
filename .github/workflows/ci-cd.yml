@@ -105,6 +105,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        env:
-          ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var "ARM_ACCESS_KEY=${{ secrets.AZURE_STORAGE_KEY }}"
