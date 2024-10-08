@@ -11,21 +11,21 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "startup_nextjs" {
   name     = "devOps"
   location = "West Europe"
 }
 
-resource "azurerm_container_app_environment" "env" {
+resource "azurerm_container_app_environment" "startup_nextjs" {
   name                = "devOps"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.startup_nextjs.location
+  resource_group_name = azurerm_resource_group.startup_nextjs.name
 }
 
-resource "azurerm_container_app" "app" {
+resource "azurerm_container_app" "startup_nextjs" {
   name                         = "startup-nextjs"
-  resource_group_name          = azurerm_resource_group.rg.name
-  container_app_environment_id = azurerm_container_app_environment.env.id
+  resource_group_name          = azurerm_resource_group.startup_nextjs.name
+  container_app_environment_id = azurerm_container_app_environment.startup_nextjs.id
   revision_mode                = "Single"
 
   template {
