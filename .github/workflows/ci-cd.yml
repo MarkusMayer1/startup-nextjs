@@ -99,6 +99,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        env:
-          CONTAINER_IMAGE_TAG: ${{ github.sha }}
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var "container_image_tag=${{ github.sha }}"

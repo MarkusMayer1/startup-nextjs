@@ -39,7 +39,7 @@ resource "azurerm_container_app" "container_app" {
   name                         = "startup-nextjs"
   resource_group_name          = azurerm_resource_group.resource_group.name
   container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
-  revision_mode                = "Single"
+  revision_mode                = "Multiple"
 
   template {
     container {
