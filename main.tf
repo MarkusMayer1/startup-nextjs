@@ -24,21 +24,21 @@ variable "container_image_tag" {
   default     = "latest"
 }
 
-resource "azurerm_resource_group" "startup_nextjs" {
+resource "azurerm_resource_group" "resource_group" {
   name     = "devOps"
   location = "West Europe"
 }
 
-resource "azurerm_container_app_environment" "startup_nextjs" {
+resource "azurerm_container_app_environment" "container_app_environment" {
   name                = "devOps"
-  location            = azurerm_resource_group.startup_nextjs.location
-  resource_group_name = azurerm_resource_group.startup_nextjs.name
+  location            = azurerm_resource_group.resource_group.location
+  resource_group_name = azurerm_resource_group.resource_group.name
 }
 
-resource "azurerm_container_app" "startup_nextjs" {
+resource "azurerm_container_app" "container_app" {
   name                         = "startup-nextjs"
-  resource_group_name          = azurerm_resource_group.startup_nextjs.name
-  container_app_environment_id = azurerm_container_app_environment.startup_nextjs.id
+  resource_group_name          = azurerm_resource_group.resource_group.name
+  container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
   revision_mode                = "Single"
 
   template {
@@ -59,4 +59,8 @@ resource "azurerm_container_app" "startup_nextjs" {
       latest_revision = true
     }
   }
+}
+
+output "container_app_fqdn" {
+  value = azurerm_container_app.container_app.latest_revision_fqdn
 }
