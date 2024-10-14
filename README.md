@@ -4,6 +4,8 @@
 
 ### [Summary of Assignment 2 Implementation](.docs/assignment2.md)
 
+### [Summary of Assignment 3 Implementation](.docs/assignment3.md)
+
 
 # Startup - Free Next.js Startup Website Template
 
