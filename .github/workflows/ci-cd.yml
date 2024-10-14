@@ -62,20 +62,41 @@ jobs:
       - name: Run audit
         run: npm audit
 
-  terraform-apply:
+  docker:
     if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/startup-nextjs:${{ github.sha }} .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/startup-nextjs:${{ github.sha }}
+
+  terraform-apply:
+    if: github.ref == 'refs/heads/release'
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Enable Terraform logging
+        run: export TF_LOG=DEBUG
+
+      - name: Azure Login
+        run: az login --use-device-code # Normally a Service Principal would be used, but we can not create a service principal with our student accounts
 
       - name: Initialize Terraform
         run: terraform init
 
-      - name: Apply Terraform configuration
-        env:
-          TF_VAR_azure_subscription_id: ${{ secrets.STARTUPNEXTJS_AZURE_SUBSCRIPTION_ID }}
-        run: terraform apply -auto-approve
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var "container_image_tag=${{ github.sha }}"

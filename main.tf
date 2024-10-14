@@ -5,39 +5,46 @@ terraform {
       version = "~>3.0"
     }
   }
-}
 
-variable "azure_subscription_id" {
-  type = string
+  backend "azurerm" {
+    resource_group_name  = "devOpsMain"
+    storage_account_name = "startupnextjstfstate"
+    container_name       = "startupnextjstfstate"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
   features {}
-
-  subscription_id = var.azure_subscription_id
 }
 
-resource "azurerm_resource_group" "rg" {
+variable "container_image_tag" {
+  description = "The tag of the container image"
+  type        = string
+  default     = "latest"
+}
+
+resource "azurerm_resource_group" "resource_group" {
   name     = "devOps"
   location = "West Europe"
 }
 
-resource "azurerm_container_app_environment" "env" {
+resource "azurerm_container_app_environment" "container_app_environment" {
   name                = "devOps"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.resource_group.location
+  resource_group_name = azurerm_resource_group.resource_group.name
 }
 
-resource "azurerm_container_app" "app" {
+resource "azurerm_container_app" "container_app" {
   name                         = "startup-nextjs"
-  resource_group_name          = azurerm_resource_group.rg.name
-  container_app_environment_id = azurerm_container_app_environment.env.id
-  revision_mode                = "Single"
+  resource_group_name          = azurerm_resource_group.resource_group.name
+  container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
+  revision_mode                = "Multiple"
 
   template {
     container {
       name   = "startup-nextjs"
-      image  = "markusmayer1/startup-nextjs:latest"
+      image  = "markusmayer1/startup-nextjs:${var.container_image_tag}"
       cpu    = 0.25
       memory = "0.5Gi"
     }
@@ -52,4 +59,8 @@ resource "azurerm_container_app" "app" {
       latest_revision = true
     }
   }
+}
+
+output "container_app_fqdn" {
+  value = azurerm_container_app.container_app.latest_revision_fqdn
 }
